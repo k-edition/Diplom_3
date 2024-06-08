@@ -1,7 +1,7 @@
 import pytest
 from selenium import webdriver
 import urls
-import data
+import helper
 import requests
 
 
@@ -27,7 +27,7 @@ def driver(request):
 @pytest.fixture(scope='function')
 def default_user():
 
-    payload = data.generate_payload_for_user()
+    payload = helper.generate_payload_for_user()
     response = requests.post(urls.BASE_URL + urls.CREATE_USER_ENDPOINT, json=payload)
     access_token = response.json()['accessToken']
     payload['accessToken'] = access_token
@@ -40,7 +40,7 @@ def default_user():
 @pytest.fixture(scope='function')
 def create_order(default_user):
 
-    payload = {'ingredients': data.get_payload_for_order()}
+    payload = {'ingredients': helper.get_payload_for_order()}
     access_token = default_user['accessToken']
     response = requests.post(urls.BASE_URL + urls.CREATE_ORDER_ENDPOINT, json=payload,
                              headers={'Authorization': access_token})
